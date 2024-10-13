@@ -1,14 +1,20 @@
-const Sequelize = require("sequelize");
 const sequelize = new Sequelize(process.env.DATABASE_URL, {
   dialect: "postgres",
   protocol: "postgres",
+  dialectModule: require('pg'),
   dialectOptions: {
-    ssl: {
-      require: true,
-      rejectUnauthorized: false // Si vous avez besoin de SSL
-    }
+  ssl: {
+  require: true,
+  rejectUnauthorized: false
   }
-});
+  },
+  pool: {
+  max: 5,
+  min: 0,
+  acquire: 30000,
+  idle: 10000
+  }
+  });
 
 
 const db = {};

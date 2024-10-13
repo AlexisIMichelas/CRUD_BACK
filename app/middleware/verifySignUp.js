@@ -4,7 +4,7 @@ const User = db.user;
 
 checkDuplicateUsernameOrEmail = (req, res, next) => {
   // Username
-  User.findOne({
+const User.findOne({
     where: {
       username: req.body.username
     }
@@ -17,7 +17,7 @@ checkDuplicateUsernameOrEmail = (req, res, next) => {
     }
 
     // Email
-    User.findOne({
+const User.findOne({
       where: {
         email: req.body.email
       }
@@ -34,7 +34,7 @@ checkDuplicateUsernameOrEmail = (req, res, next) => {
   });
 };
 
-checkRolesExisted = (req, res, next) => {
+const checkRolesExisted = (req, res, next) => {
   if (req.body.roles) {
     for (let i = 0; i < req.body.roles.length; i++) {
       if (!ROLES.includes(req.body.roles[i])) {

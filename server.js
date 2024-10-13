@@ -43,10 +43,9 @@ const Role = db.role;
 const User = db.user; // Importer le modèle d'utilisateur
 
 // Synchroniser la base de données
-db.sequelize.sync().then(() => {
-  console.log('Database synchronized.');
-  initial(); // Appeler la fonction pour initialiser les rôles et l'admin
-});
+db.sequelize.sync({ alter: true }).then(() => {
+  console.log('Database synchronized successfully.');
+  });
 
 // Initialiser les rôles et l'utilisateur admin
 function initial() {
