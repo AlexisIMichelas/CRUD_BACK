@@ -1,5 +1,4 @@
 require('dotenv').config();
-
 const express = require("express");
 const cors = require("cors");
 const multer = require("multer");
@@ -11,7 +10,7 @@ const app = express();
 // Configurer les options de CORS
 var corsOptions = {
   credentials: true,
-  origin: "https://showmylife.vercel.app"
+  origin: "*"
 };
 
 app.use(cors(corsOptions));
@@ -44,8 +43,8 @@ const User = db.user; // Importer le modèle d'utilisateur
 
 // Synchroniser la base de données
 db.sequelize.sync({ alter: true }).then(() => {
-  console.log('Database synchronized successfully.');
-  });
+  console.log('Database synchronized with alter.');
+});
 
 // Initialiser les rôles et l'utilisateur admin
 function initial() {
@@ -54,12 +53,12 @@ function initial() {
 
   // Créer un compte administrateur par défaut
   const adminEmail = "admin@gmail.com";
-  const adminPassword = "admin"; // Pour production, assurez-vous de hacher ce mot de passe
+  const adminPassword = "azerty1234"; // Pour production, assurez-vous de hacher ce mot de passe
 
   User.findOrCreate({
     where: { email: adminEmail },
     defaults: {
-      username: "Admin",
+      username: "admin",
       password: adminPassword,
       // Assurez-vous d'avoir le bon roleId
       roleId: 3 // Rôle administrateur
