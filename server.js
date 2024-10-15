@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config(); // Charge les variables d'environnement
 const express = require("express");
 const cors = require("cors");
 const multer = require("multer");
@@ -16,14 +16,10 @@ var corsOptions = {
 };
 
 app.use(cors(corsOptions));
-
-// Gérer les requêtes OPTIONS
-app.options('*', cors(corsOptions));
+app.options('*', cors(corsOptions)); // Gérer les requêtes OPTIONS
 
 // Middleware pour parser les requêtes de type application/json
 app.use(express.json());
-
-// Middleware pour parser les requêtes de type application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
 
 // Servir des fichiers statiques à partir du répertoire 'uploads'
@@ -67,8 +63,9 @@ const articles = require("./app/controllers/article.controller");
 app.post("/api/articles", upload.single("image"), articles.create);
 require("./app/routes/article.routes")(app);
 
+// Routes pour les commentaires
 const commentRoutes = require("./app/routes/comment.routes");
-app.use("/api", commentRoutes)
+app.use("/api", commentRoutes);
 
 // Routes pour la gestion des utilisateurs et authentification
 require('./app/routes/auth.routes')(app);

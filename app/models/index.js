@@ -1,3 +1,4 @@
+// index.js
 const Sequelize = require("sequelize");
 
 // Vérifier si DATABASE_URL est bien définie dans les variables d'environnement
@@ -13,7 +14,7 @@ const sequelize = new Sequelize(process.env.DATABASE_URL, {
   dialectOptions: {
     ssl: {
       require: true,               // Assure que SSL est bien requis
-      rejectUnauthorized: false     // Nécessaire si le certificat SSL n'est pas strictement validé
+      rejectUnauthorized: false     // Changez ceci en true en production avec un certificat valide
     }
   },
   pool: {
