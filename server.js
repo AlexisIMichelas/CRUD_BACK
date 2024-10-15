@@ -10,10 +10,15 @@ const app = express();
 // Configurer les options de CORS
 var corsOptions = {
   credentials: true,
-  origin: ["https://showmylife.vercel.app"] 
+  origin: ["https://showmylife.vercel.app"],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 };
 
 app.use(cors(corsOptions));
+
+// Gérer les requêtes OPTIONS
+app.options('*', cors(corsOptions));
 
 // Middleware pour parser les requêtes de type application/json
 app.use(express.json());
