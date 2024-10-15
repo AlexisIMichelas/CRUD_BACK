@@ -42,7 +42,7 @@ const Role = db.role;
 const User = db.user; // Importer le modèle d'utilisateur
 
 // Synchroniser la base de données
-db.sequelize.sync().then(() => {
+db.sequelize.sync({ alter: true }).then(() => {
   console.log('Database synchronized successfully.');
 });
 
