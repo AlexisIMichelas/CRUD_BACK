@@ -1,20 +1,21 @@
+const Sequelize = require("sequelize");
 const sequelize = new Sequelize(process.env.DATABASE_URL, {
   dialect: "postgres",
   protocol: "postgres",
   dialectModule: require('pg'),
   dialectOptions: {
-  ssl: {
-  require: true,
-  rejectUnauthorized: false
-  }
+    ssl: {
+      require: true,
+      rejectUnauthorized: false
+    }
   },
   pool: {
-  max: 5,
-  min: 0,
-  acquire: 30000,
-  idle: 10000
-  }
-  });
+    max: 5,           // Nombre maximum de connexions simultanées
+    min: 0,           // Nombre minimum de connexions à maintenir ouvertes
+    acquire: 30000,   // Temps maximum en millisecondes que Sequelize va essayer de se connecter avant d'échouer
+    idle: 10000       // Temps maximum en millisecondes pendant lequel une connexion inutilisée peut rester ouverte avant d'être fermée
+}
+});
 
 
 const db = {};
