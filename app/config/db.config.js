@@ -5,12 +5,6 @@ module.exports = {
   DB: process.env.PGDATABASE || "testdb",
   PORT: process.env.PGPORT || 5432,
   dialect: "postgres",
-  dialectOptions: {
-    ssl: {
-      require: true, // Requiert SSL
-      rejectUnauthorized: true // Changez ceci en true en production avec un certificat valide
-    }
-  },
   pool: {
     max: 5,
     min: 0,

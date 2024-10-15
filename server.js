@@ -1,4 +1,4 @@
-require('dotenv').config(); // Charge les variables d'environnement
+require('dotenv').config();
 const express = require("express");
 const cors = require("cors");
 const multer = require("multer");
@@ -10,16 +10,15 @@ const app = express();
 // Configurer les options de CORS
 var corsOptions = {
   credentials: true,
-  origin: '*', // Autoriser toutes les origines
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  origin: "*"
 };
 
 app.use(cors(corsOptions));
-app.options('*', cors(corsOptions)); // Gérer les requêtes OPTIONS
 
 // Middleware pour parser les requêtes de type application/json
 app.use(express.json());
+
+// Middleware pour parser les requêtes de type application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
 
 // Servir des fichiers statiques à partir du répertoire 'uploads'
@@ -63,9 +62,8 @@ const articles = require("./app/controllers/article.controller");
 app.post("/api/articles", upload.single("image"), articles.create);
 require("./app/routes/article.routes")(app);
 
-// Routes pour les commentaires
 const commentRoutes = require("./app/routes/comment.routes");
-app.use("/api", commentRoutes);
+app.use("/api", commentRoutes)
 
 // Routes pour la gestion des utilisateurs et authentification
 require('./app/routes/auth.routes')(app);

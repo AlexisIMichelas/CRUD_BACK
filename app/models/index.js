@@ -1,35 +1,25 @@
-// index.js
 const Sequelize = require("sequelize");
-
-// Vérifier si DATABASE_URL est bien définie dans les variables d'environnement
-if (!process.env.DATABASE_URL) {
-  throw new Error("DATABASE_URL is not defined");
-}
-
-// Configuration de Sequelize pour la base de données PostgreSQL
 const sequelize = new Sequelize(process.env.DATABASE_URL, {
   dialect: "postgres",
   protocol: "postgres",
   dialectModule: require('pg'),
   dialectOptions: {
     ssl: {
-      require: true,               // Assure que SSL est bien requis
-      rejectUnauthorized: false     // Changez ceci en true en production avec un certificat valide
+      require: true,
+      rejectUnauthorized: false
     }
   },
   pool: {
     max: 5,           // Nombre maximum de connexions simultanées
     min: 0,           // Nombre minimum de connexions à maintenir ouvertes
-    acquire: 30000,   // Temps maximum que Sequelize va essayer de se connecter avant d'échouer
-    idle: 10000       // Temps maximum qu'une connexion inutilisée peut rester ouverte avant d'être fermée
-  },
-  logging: console.log // Activer les logs pour suivre les requêtes SQL
+    acquire: 30000,   // Temps maximum en millisecondes que Sequelize va essayer de se connecter avant d'échouer
+    idle: 10000       // Temps maximum en millisecondes pendant lequel une connexion inutilisée peut rester ouverte avant d'être fermée
+}
 });
 
-// Initialisation de l'objet `db` qui contiendra toutes les associations
+
 const db = {};
 
-// Ajouter Sequelize à l'objet `db`
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
@@ -39,7 +29,7 @@ db.user = require("../models/user.model.js")(sequelize, Sequelize);
 db.role = require("../models/role.model.js")(sequelize, Sequelize);
 db.comment = require("../models/comment.model.js")(sequelize, Sequelize);
 
-// Définir les associations entre les rôles et les utilisateurs
+// Définir les associations
 db.role.belongsToMany(db.user, {
   through: "user_roles"
 });
@@ -47,43 +37,41 @@ db.user.belongsToMany(db.role, {
   through: "user_roles"
 });
 
-// Définir les associations pour Comment (commentaires)
+// Définition des associations pour Comment
 db.comment.associate = (models) => {
   db.comment.belongsTo(models.user, {
     foreignKey: 'userId',
-    as: 'user' // Inclure les informations de l'utilisateur dans les commentaires
+    as: 'user' // Utilisé pour inclure les données de l'utilisateur
   });
   db.comment.belongsTo(models.articles, {
     foreignKey: 'articleId',
-    as: 'article' // Inclure les informations de l'article dans les commentaires
+    as: 'article' // Utilisé pour inclure les données de l'article
   });
 };
 
-// Définir les associations pour Article
+// Définition des associations pour Article
 db.articles.associate = (models) => {
   db.articles.hasMany(models.comment, {
     foreignKey: 'articleId',
-    as: 'comments' // Récupérer les commentaires associés à un article
+    as: 'comments' // Utilisé pour récupérer les commentaires d'un article
   });
 };
 
-// Définir les associations pour User
+// Définition des associations pour User
 db.user.associate = (models) => {
   db.user.hasMany(models.comment, {
     foreignKey: 'userId',
-    as: 'comments' // Récupérer les commentaires associés à un utilisateur
+    as: 'comments' // Utilisé pour récupérer les commentaires d'un utilisateur
   });
 };
 
-// Définir les rôles possibles
 db.ROLES = ["user", "admin", "moderator"];
 
-// Appel des associations après la définition de tous les modèles
+// Appel des associations
 Object.keys(db).forEach(modelName => {
   if (db[modelName].associate) {
     db[modelName].associate(db);
   }
 });
 
-// Exporter l'objet `db` pour l'utiliser ailleurs dans le projet
 module.exports = db;
